@@ -5,14 +5,10 @@ nlogn：长度为n，partition操作为logn次， 每次partition操作n次
 """
 def quick_sort(arr, l, r):
     """
-    [5, 7, 1, 4, 2, 8, 6, 3, 10] 双指针，选择基准值pivot，例如5.
-    [0, 1, 2, 3 ,4, 5, 6, 7, 8]
-    从右边找到第一个小于5的值索引，7,交换arr[x]和arr[y]
-    从左边找到第一个大于5的值索引，1,交换arr[x]和arr[y]
+    选择基准、小的放左，大的放右；
     """
     if l >= r: return arr
-    x, y = l, r
-    base = arr[l]
+    x, y, base = l, r, arr[l]
     while x <= y:
         while x <= y and arr[y] > base: y -= 1
         while x <= y and arr[x] < base: x += 1
@@ -20,26 +16,72 @@ def quick_sort(arr, l, r):
             arr[x], arr[y] = arr[y], arr[x]
             x += 1
             y -= 1
-
-    arr[x] = base
-
     quick_sort(arr, l, y)
     quick_sort(arr, x, r)
-
-
 arr = [5, 7, 1, 4, 2, 8, 6, 3, 10]
-quick_sort(arr, 0, len(arr) - 1)
+# quick_sort(arr, 0, len(arr) - 1)
+# print(arr)
 
 def quick_sort_v2(arr, l, r):
+    # 单边递归法
     while l < r:
         x, y, pivot = l, r, arr[l]
-        while x < y:
-            while x < y and arr[y] > pivot: y -= 1
-            if x < y: arr[x] = arr[y]
-            while x < y and arr[x] < pivot: x += 1
-            if x < y: arr[y] = arr[x]
-        arr[x] = pivot
-        quick_sort_v2(arr, x + 1, r)
-        r = x - 1
-quick_sort_v2(arr, 0, len(arr) - 1)
+        while x <= y:
+            while x <= y and arr[y] > pivot: y -= 1
+            while x <= y and arr[x] < pivot: x += 1
+            if x <= y:
+                arr[x], arr[y] = arr[y], arr[x]
+                x += 1
+                y -= 1
+        quick_sort_v2(arr, x, r)
+        r = y
+quick_sort_v2([3,2,1,3,2,3,4,5,6], 0, len(arr) - 1)
+print(arr)
+
+
+
+threshold = 16
+
+
+# 三点取中法
+def median(a, b, c):
+    if a > b: a, b = b, a
+    if a > c: a, c = c, a
+    if b > c: b, c = c, b
+    return b
+
+# 无监督写法+插入排序
+def final_insert_sort(arr, l, r):
+    ind = l
+    for i in range(l + 1, r + 1):
+        if arr[i] < arr[ind]: ind = i
+    while ind > l:
+        arr[ind], arr[ind - 1] = arr[ind - 1], arr[ind]
+        ind -= 1
+    for i in range(l+2, r + 1):
+        j = i
+        while arr[j] < arr[j -1]:
+            arr[j], arr[j - 1] = arr[j - 1], arr[j]
+            j -= 1
+
+def __quick_sort_v3(arr, l, r):
+    while r - l > threshold:
+        x, y, base = l, r, median(arr[l], arr[r], arr[(l + r) // 2])  # 三点取中法
+        while x <= y:
+            while x <= y and arr[r] > base: y -= 1
+            while x <= y and arr[l] < base: x += 1
+            if x <= y:
+                arr[x], arr[y] = arr[y], arr[x]
+                x += 1
+                y -= 1
+        __quick_sort_v3(arr, x, r)
+        r = y  # 单边递归法
+    return
+
+def quick_sort_v3(arr, l, r):
+    __quick_sort_v3(arr, l, r)
+    final_insert_sort(arr, l, r)
+
+
+quick_sort_v3(arr, 0, len(arr) - 1)
 print(arr)

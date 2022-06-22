@@ -4,7 +4,9 @@
 所以只需要一次遍历，将2放后面，将0放前面即可。具体来说，就是x的左边为0所在区域，y的右边为1所在的区域。base为1所在的区域。
 simplify：排序核心为分区，定义基准是基础，如何遍历数组，得到分区结果是设计的关键。（快排是左大和右小进行交换；本题是将0放在x的左边，将2放在y的右边，选择的是1作为基准）
 """
-
+i
+import simple_add
+print(simple_add.function(1,2))
 def three_partition(arr, l, r, z):
     if l >= r: return
     x, y, base = 0, r, l

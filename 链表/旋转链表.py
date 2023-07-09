@@ -8,20 +8,37 @@ class ListNode:
 """
 class Solution:
     def rotateRight(self, head, k):
-        cur = head
-        length = 1
-        while cur.next:
-            cur = cur.next
-            length += 1
-        cur.next = head
-        k = k % length
-        steps = length - k
-        cur = head
-        for _ in range(steps - 1):
-            cur = cur.next
-        rotate_head = cur.next
-        cur.next = None
-        return rotate_head
+        # cur = head
+        # length = 1
+        # while cur.next:
+        #     cur = cur.next
+        #     length += 1
+        # cur.next = head
+        # k = k % length
+        # steps = length - k
+        # cur = head
+        # for _ in range(steps - 1):
+        #     cur = cur.next
+        # rotate_head = cur.next
+        # cur.next = None
+        # return rotate_head
+        p = head
+        num = 1
+        while p.next:
+            p = p.next
+            num += 1
+        print(num)
+        p.next = head
+        k = k % num
+        step = num - k - 1
+        p = head
+        while step > 0:
+            P = p.next
+            step -= 1
+        next_node = p.next
+        p.next = None
+
+        return next_node
 
 if __name__ == '__main__':
     node1 = ListNode(1)

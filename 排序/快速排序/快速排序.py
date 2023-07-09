@@ -35,7 +35,7 @@ def quick_sort_v2(arr, l, r):
                 y -= 1
         quick_sort_v2(arr, x, r)
         r = y
-quick_sort_v2([3,2,1,3,2,3,4,5,6], 0, len(arr) - 1)
+quick_sort_v2([6,2,1,3,2,3,4,5,3], 0, len(arr) - 1)
 print(arr)
 
 

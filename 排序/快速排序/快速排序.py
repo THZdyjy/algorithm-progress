@@ -8,7 +8,7 @@ def quick_sort(arr, l, r):
     选择基准、小的放左，大的放右；
     """
     if l >= r: return arr
-    x, y, base = l, r, arr[l]
+    x, y, base = l, r, arr[l+(r-l)//2]
     while x <= y:
         while x <= y and arr[y] > base: y -= 1
         while x <= y and arr[x] < base: x += 1
@@ -19,8 +19,8 @@ def quick_sort(arr, l, r):
     quick_sort(arr, l, y)
     quick_sort(arr, x, r)
 arr = [5, 7, 1, 4, 2, 8, 6, 3, 10]
-# quick_sort(arr, 0, len(arr) - 1)
-# print(arr)
+quick_sort(arr, 0, len(arr) - 1)
+print(arr)
 
 def quick_sort_v2(arr, l, r):
     # 单边递归法
@@ -35,8 +35,8 @@ def quick_sort_v2(arr, l, r):
                 y -= 1
         quick_sort_v2(arr, x, r)
         r = y
-quick_sort_v2([6,2,1,3,2,3,4,5,3], 0, len(arr) - 1)
-print(arr)
+# quick_sort_v2([6,2,1,3,2,3,4,5,3], 0, len(arr) - 1)
+# print(arr)
 
 
 
@@ -82,6 +82,6 @@ def quick_sort_v3(arr, l, r):
     __quick_sort_v3(arr, l, r)
     final_insert_sort(arr, l, r)
 
-
-quick_sort_v3(arr, 0, len(arr) - 1)
-print(arr)
+#
+# quick_sort_v3(arr, 0, len(arr) - 1)
+# print(arr)

@@ -1,0 +1,52 @@
+BFS
+一、解决四大类问题
+1.联通区域的：联通区域: -(最短)路径:-分层遍历：-拓扑排序：找到谁和谁连着/ 找到几块连着/ 找到连着的最大区域/ .....
+2.最优路径：给定起始点，找到相连的(最短)路径是多长/ follow up: 1. 给出一条具体线路；2. 给出所有线路按明显“层”顺序，遍历所有点对于“有依赖顺序的点”进行排序
+3.分层遍历：明显“层”顺序，遍历所有点
+4.拓扑排序：对于“有依赖顺序的点”进行排序
+
+二、场景
+矩阵，树图，抽象逻辑层面，拓扑排序
+
+三、逻辑：
+出口，方向，等等
+堆，优先队列的使用
+
+“”“模板
+# Python
+def BFS(root):
+    visited = set()
+	queue = []
+	queue.append([root])
+
+	while queue:
+		node = queue.pop()
+		visited.add(node)
+
+		process(node)
+		nodes = generate_related_nodes(node)
+		queue.push(nodes)
+
+	# other processing work
+“”“
+
+
+DFS
+找具体（把内容返回）的全部解，把符合条件的全部解返回
+找可行性，判断给定条件中，是否有符合要求的
+与树相关的
+
+
+visited = set()
+def dfs(node, visited):
+    if node in visited: # terminator
+    	# already visited
+    	return
+
+	visited.add(node)
+
+	# process current node here.
+	...
+	for next_node in node.children():
+		if next_node not in visited:
+			dfs(next_node, visited)

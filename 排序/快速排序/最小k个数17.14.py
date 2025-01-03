@@ -9,8 +9,8 @@ def quick_sort_v2(arr, l, r, k):
     if l >= r: return
     x, y, pivot = l, r, arr[l]
     while x <= y:
-        while x <= y and arr[y] < pivot: y -= 1
-        while x <= y and arr[x] > pivot: x += 1
+        while x <= y and arr[y] > pivot: y -= 1
+        while x <= y and arr[x] < pivot: x += 1
         if x <= y:
             arr[x], arr[y] = arr[y], arr[x]
             x += 1

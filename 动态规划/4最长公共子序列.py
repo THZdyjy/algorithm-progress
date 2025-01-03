@@ -1,0 +1,90 @@
+class Solution:
+    class Solution:
+        def longestCommonSubsequence(self, s1: str, s2: str) -> int:
+            m, n = len(s1), len(s2)
+            dp = [[0] * (n + 1) for _ in range(m + 1)]
+            # 定义：s1[0:i-1] 和 s2[0:j-1] 的 lcs 长度为 dp[i][j]
+            # 目标：s1[0:m-1] 和 s2[0:n-1] 的 lcs 长度，即 dp[m][n]
+            # base case: dp[0][..] = dp[..][0] = 0
+
+            for i in range(1, m + 1): # 遍历到+1
+                for j in range(1, n + 1):
+                    # 现在 i 和 j 从 1 开始，所以要减一
+                    if s1[i - 1] == s2[j - 1]:
+                        # s1[i-1] 和 s2[j-1] 必然在 lcs 中
+                        dp[i][j] = 1 + dp[i - 1][j - 1]
+                    else:
+                        # s1[i-1] 和 s2[j-1] 至少有一个不在 lcs 中
+                        dp[i][j] = max(dp[i][j - 1], dp[i - 1][j])
+
+            return dp[m][n]
+"""
+自底向上的做法：
+先初始化了一个dp二维数组，
+并且base为dp[0][:], dp[:][0] 为0 。代表的是 空串“”与s2的lcs为0； s1与空串“”的lcs为0
+状态转移方程：
+                        if s1[i - 1] == s2[j - 1]:
+                            # s1[i-1] 和 s2[j-1] 两字符相同，因此都往前走一步，看看dp[i - 1][j - 1]是多少，在此基础上加1即可。
+                            dp[i][j] = 1 + dp[i - 1][j - 1]
+                        else:
+                            # s1[i-1] 和 s2[j-1] 至少有一个不在 lcs 中
+                            dp[i][j] = max(dp[i][j - 1], dp[i - 1][j])
+比较下两种做法的状态转移方程的差异，其本质是一样的。
+
+"""
+class Solution:
+    def __init__(self):
+        # 备忘录，消除重叠子问题
+        self.memo = None
+
+    def longestCommonSubsequence(self, s1: str, s2: str) -> int:
+        m, n = len(s1), len(s2)
+        self.memo = [[-1] * n for _ in range(m)]
+        # 自顶向下计算 s1[0:] 和 s2[0:] 的 lcs 长度
+        return self.dp(s1, 0, s2, 0)
+
+    # 定义：计算 s1[i:] 和 s2[j:] 的最长公共子序列长度
+    def dp(self, s1: str, i: int, s2: str, j: int) -> int:
+        # base case
+        if i == len(s1) or j == len(s2):
+            return 0
+        # 如果之前计算过，则直接返回备忘录中的答案
+        if self.memo[i][j] != -1:
+            return self.memo[i][j]
+        # 根据 s1[i] 和 s2[j] 的情况做选择
+        if s1[i] == s2[j]:
+            self.memo[i][j] = 1 + self.dp(s1, i + 1, s2, j + 1)
+        else:
+            self.memo[i][j] = max(self.dp(s1, i + 1, s2, j),
+                                  self.dp(s1, i, s2, j + 1))
+        return self.memo[i][j]
+
+"""
+core: 动态规划的问题，可以自顶向下，也可以自底向上来做。
+本解法先来理解自顶向下：
+定义递归函数dp(s1,i,s2,j)的含义是，字符串s1[i:] 和 字符串s2[j:] 他们的公共最长子序列的长度。
+base 为i，j指到超出字符串长度的时候。这时候公共的为0.
+状态转移方程：当前ij指向的字符，如果两个相同。有两种情况，二者相同。二者不同。
+如果二者相同的话， 那么这个字符就是以i, j 为起始的子串s1[i:], s2[j:]的公共最长子序列的一部分。然后s1和s2跳过这个字符，往下走即可。
+二者不同的话，考虑以i, j 为起始的子串s1[i:], s2[j:]，s1[i], s[j]已然不同，说明二者不可能同时是剩下子串的最长公共子序列的公共字符，至少有一个不是（为什么呢？->注意递归函数的意义， 它是以i为起始的字符s1，以j为起始的字符s2，比较这原字符串的
+一部分）因此这两个字符不同的话，可能i是，j不是；i不是，j是。或者两者都不是，已经被包含在前面两种情况中了。
+因此，状态转移方程是：
+            if s1[i] == s2[j]:
+                # s1[i] 和 s2[j] 必然在 lcs 中
+                self.memo[i][j] = 1 + self.dp(s1, i + 1, s2, j + 1)
+            else:
+                # s1[i] 和 s2[j] 至少有一个不在 lcs 中
+                self.memo[i][j] = max(self.dp(s1, i + 1, s2, j),
+                                      self.dp(s1, i, s2, j + 1))
+
+模板：
+int dp(int i, int j) {
+    dp(i + 1, j + 1); // #1
+    dp(i, j + 1);     // #2
+    dp(i + 1, j);     // #3
+}
+
+"""
+
+
+
